@@ -1,58 +1,55 @@
-﻿using System.Diagnostics;
-
-namespace CountryListWebAPI
+﻿namespace CountryListWebAPI
 {
     public class TreeTraversal
-    {        
+    {
         public static Boolean FindRoute(TreeNode root, List<string> route, int searchValue)
         {
             if (root == null) return false;
-            route.Add($"Destination: {SharedFunctions.CountryList.FirstOrDefault(x => x.Value == searchValue)}");
-            route.Add("Route: ");
-            route.Add(root.country);
 
-            while (root.data != searchValue)
+            route.Add(root.Country);
+
+            while (root.Data != searchValue)
             {
-                if (root.data != searchValue)
+                if (root.Data != searchValue)
                 {
-                    if (root.leftNode == null)
+                    if (root.LeftNode == null)
                     {
-                        root = root.rightNode;
+                        root = root.RightNode;
                     }
-                    else if (root.rightNode == null)
+                    else if (root.RightNode == null)
                     {
-                        root = root.leftNode;
+                        root = root.LeftNode;
                     }
                     else
                     {
-                        if (root.leftNode.data == searchValue)
+                        if (root.LeftNode.Data == searchValue)
                         {
-                            route.Add(root.leftNode.country);
+                            route.Add(root.LeftNode.Country);
                             break;
                         }
-                        else if (root.rightNode.data == searchValue)
+                        else if (root.RightNode.Data == searchValue)
                         {
-                            route.Add(root.rightNode.country);
+                            route.Add(root.RightNode.Country);
                             break;
                         }
-                        else if (searchValue > root.data && root.rightNode != null)
+                        else if (searchValue > root.Data && root.RightNode != null)
                         {
-                            root = root.rightNode;
+                            root = root.RightNode;
                         }
-                        else if (searchValue < root.data && root.leftNode != null)
+                        else if (searchValue < root.Data && root.LeftNode != null)
                         {
-                            root = root.leftNode;
+                            root = root.LeftNode;
                         }
                         else return false;
                     }
                 }
                 else
                 {
-                    route.Add(root.country);
+                    route.Add(root.Country);
                     break;
                 }
 
-                route.Add(root.country);
+                route.Add(root.Country);
             }
             return true;
         }

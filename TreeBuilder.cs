@@ -4,31 +4,22 @@ namespace CountryListWebAPI
 {
     public class TreeBuilder
     {
-        public TreeNode root { get; set; }
-        private TreeNode current { get; set; }
-        private TreeNode tempParent { get; set; }
-        public static TreeBuilder tree { get; set; }
+        public TreeNode? Root { get; set; } = null;
+        public static TreeBuilder Tree { get; set; } = new();
 
-        public TreeBuilder()
+        public void BuildTree()
         {
-            this.root = null;
-        }
+            if (Tree.Root == null) Tree.Root = InsertNodeToTree(Tree.Root, CountryList.ElementAt(0).Value, CountryList.ElementAt(0).Key);
 
-
-        public static void BuildTree()
-        {
-            tree = new TreeBuilder();
-
-            tree.root = InsertNodeToTree(tree.root, CountryList.ElementAt(0).Value, CountryList.ElementAt(0).Key);
             for (int i = 1; i < CountryList.Count; i++)
             {
-                InsertNodeToTree(tree.root, CountryList.ElementAt(i).Value, CountryList.ElementAt(i).Key);
+                InsertNodeToTree(Tree.Root, CountryList.ElementAt(i).Value, CountryList.ElementAt(i).Key);
             }
         }
 
-        static TreeNode InsertNodeToTree(TreeNode root, int data, string sdata)
+        static TreeNode InsertNodeToTree(TreeNode root, int value, string country)
         {
-            TreeNode newNode = new TreeNode(data, sdata);
+            TreeNode newNode = new(value, country);
 
             TreeNode x = root;
             TreeNode y = null;
@@ -36,13 +27,13 @@ namespace CountryListWebAPI
             while (x != null)
             {
                 y = x;
-                if (data < x.data) x = x.leftNode;
-                else x = x.rightNode;
+                if (value < x.Data) x = x.LeftNode;
+                else x = x.RightNode;
             }
 
             if (y == null) y = newNode;
-            else if (data < y.data) y.leftNode = newNode;
-            else y.rightNode = newNode;
+            else if (value < y.Data) y.LeftNode = newNode;
+            else y.RightNode = newNode;
 
             return y;
         }

@@ -1,28 +1,35 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CountryListWebAPI;
-
-
 
 namespace CountryListWebAPI.Controllers
 {
+    public class ReturnMessage
+    {
+        public string Destination { get; set; } = "";
+        public List<string> List { get; set; } = new();
+    }
+
     [ApiController]
-    [Route("[controller]")]
     public class TreeNodeController : ControllerBase
     {
-
         [HttpGet("{destination}")]
-        public ActionResult<List<string>> Get(string destination)
+        public ActionResult<ReturnMessage> Get(string destination)
         {
-            TreeBuilder.BuildTree();
+            TreeBuilder tb = new();
+            tb.BuildTree();
 
             if (SharedFunctions.CountryList.TryGetValue(destination.ToUpper(), out int result))
             {
-                List<string> route = TreeTraversal.ListRoute(TreeBuilder.tree.root, result);
+                List<string> route = TreeTraversal.ListRoute(TreeBuilder.Tree.Root, result);
 
-                return route;
+                return new ReturnMessage()
+                {
+                    Destination = destination.ToUpper(),
+                    List = route
+                };
             }
-            return null;
+            return BadRequest(new Dictionary<string, object>() { { "Error", "Wrong destination!" } });
         }
+
 
     }
 }
